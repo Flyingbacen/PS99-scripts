@@ -9,21 +9,24 @@ def main():
     okcoords = 690, 725
     ecolor = (255, 255, 255)
     okcolor = (125, 245, 13)
+    count = 0
     global running
     running = True
     try:
         while running:
             if pyautogui.pixelMatchesColor(*ecoords, ecolor, tolerance=10) or ecoords == (0, 0):
                 pydirectinput.press("e")
-                time.sleep(0.3)
                 while True:
                     if pyautogui.pixelMatchesColor(*okcoords, okcolor, tolerance=10):
                         pydirectinput.click(*okcoords, 10, 0.1)
                         time.sleep(4)
                         break
                     else:
-                        break
-            time.sleep(0.1)
+                        if count == 10:
+                            count = 0
+                            break
+                        count += 1
+                        time.sleep(0.5)
     except pydirectinput.FailSafeException:
         print("Program ended")
         return
