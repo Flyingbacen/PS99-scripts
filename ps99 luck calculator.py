@@ -49,7 +49,7 @@ def search(search_term, jsoninf) -> dict:
         print(f"Selected Egg '{selected_egg['configName']}' contains pets: {pets}")
         return selected_egg
 
-def finalPrint(list):
+def finalPrint(list: list):
     system("cls")
     for i in list:
         print(i)
@@ -95,6 +95,32 @@ def one_in_x(selected_egg: dict) -> str:
         finalStatement2.append(f"{i[0]}:{i[1]}|{i[2]}")
     finalPrint(finalStatement2)
 
+def time_to_hatch(selected_egg: dict) -> str:
+    odds = []
+    finalStatement3 = []
+    system("cls")
+    for pet in selected_egg['configData']['pets']:
+        pet_name = pet[0]
+        pet_chance = pet[1]
+        try:
+            if round(100 / float(pet_chance) == 1): # 
+                time_required = round(100 / float(pet_chance), 3) + " minute"
+            else:
+                time_required = round(100 / float(pet_chance) / 60, 3) + " minutes"
+        except ZeroDivisionError:
+            print(f"ERROR: Pet: '{pet_name}' with an undefined chance (0%)\nunable to continue")
+            input()
+            exit()
+        odds.append(f"Pet: '{pet_name}': {time_required}")
+    largestlength = 0
+    for i in odds:
+        length = len(i.split(":")[1])
+        largestlength = length if length > largestlength else largestlength
+    for i in odds:
+        i = i.split(":")
+        i[1] = i[1].ljust(largestlength)
+        finalStatement3.append(f"{i[0]}:{i[1]}|{i[2]}")
+    finalPrint(finalStatement3)
 
 def main():
     searchterm = input("Enter the name of the pet you want to search for: ")
@@ -112,6 +138,10 @@ def main():
             elif choice == "2":
                 system("cls")
                 one_in_x(selected_egg)
+                first = False
+            elif choice == "3":
+                system("cls")
+                time_to_hatch(selected_egg)
                 first = False
             elif choice == "0":
                 system("cls")
