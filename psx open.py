@@ -1,7 +1,9 @@
 import keyboard
 import pydirectinput
 import threading
+from pyautogui import pixelMatchesColor
 
+pydirectinput.PAUSE = 0.05
 running = True
 
 def main():
@@ -17,6 +19,7 @@ def stop():
 
 main_thread = threading.Thread(target=main)
 
+print("f3 to start\nf8 to stop\n")
 keyboard.add_hotkey("f3", lambda: main_thread.start())
-keyboard.add_hotkey("f8", stop)
+keyboard.add_hotkey("f8", lambda: [stop(), main_thread.join()])
 keyboard.wait("f8")
